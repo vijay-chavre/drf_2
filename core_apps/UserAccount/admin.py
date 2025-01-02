@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserAccount
+from .models import UserAccount, Books
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -19,3 +19,19 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserAccount, UserAdmin)
+
+
+class BookAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "author",
+        "description",
+        "publication_date",
+        "isbn",
+        "price",
+    ]
+
+    search_fields = ["title", "author", "isbn"]
+
+
+admin.site.register(Books, BookAdmin)

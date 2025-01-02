@@ -2,6 +2,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv, path
 from loguru import logger
+from datetime import timedelta
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +52,7 @@ THIRD_PARTY_APPS = [
     "djcelery_email",
     "django_celery_beat",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 LOCAL_APPS = ["core_apps.UserAccount"]
@@ -64,6 +67,19 @@ REST_FRAMEWORK = {
     ],
 }
 
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Basic": {"type": "basic"},
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"},
+    }
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),  # Access token expires in 5 minutes
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # Refresh token expires in 1 day
+    "ROTATE_REFRESH_TOKENS": True,  # Issue a new refresh token with every refresh
+    "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens after rotation
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

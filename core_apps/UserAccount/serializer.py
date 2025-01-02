@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import serializers
-from core_apps.UserAccount.models import UserAccount
+from core_apps.UserAccount.models import UserAccount, Books
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -18,3 +18,22 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)  # Hash the password
         instance.save()
         return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation["full_name"] = f"{instance.first_name} {instance.last_name}"
+        return representation
+
+
+class user_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = ["id", "email", "first_name", "last_name", "username"]
+
+
+class BookSerializer(serializers.ModelSerializer):
+    user = user_serializer()
+
+    class Meta:
+        model = Books
+        fields = "__all__"
