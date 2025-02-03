@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from os import getenv, path
 from loguru import logger
 from datetime import timedelta
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -10,10 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 APPS_DIR = BASE_DIR / "core_apps"
 
-local_env_file = path.join(BASE_DIR, ".envs", ".env.local")
+# Determine which environment file to load
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
+env_file = os.path.join(BASE_DIR, ".envs", f".env.{ENVIRONMENT}")
 
-if path.isfile(local_env_file):
-    load_dotenv(local_env_file)
+if os.path.isfile(env_file):
+    load_dotenv(env_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -75,8 +78,10 @@ SWAGGER_SETTINGS = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),  # Access token expires in 5 minutes
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # Refresh token expires in 1 day
+    # Access token expires in 5 minutes
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=10),
+    # Refresh token expires in 1 day
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,  # Issue a new refresh token with every refresh
     "BLACKLIST_AFTER_ROTATION": True,  # Blacklist old refresh tokens after rotation
 }
