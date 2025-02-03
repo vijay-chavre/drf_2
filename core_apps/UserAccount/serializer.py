@@ -1,4 +1,3 @@
-from django.urls import path, include
 from rest_framework import serializers
 from core_apps.UserAccount.models import UserAccount, Books
 
@@ -6,7 +5,7 @@ from core_apps.UserAccount.models import UserAccount, Books
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = "__all__"
+        fields = ["id", "email", "first_name", "last_name", "username"]
         extra_kwargs = {
             "password": {"write_only": True}
         }  # Prevent password from being included in responses
@@ -21,19 +20,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["full_name"] = f"{instance.first_name} {instance.last_name}"
+        representation["full_name"] = f"{
+            instance.first_name} {instance.last_name}"
         return representation
 
 
-class user_serializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserAccount
-        fields = ["id", "email", "first_name", "last_name", "username"]
-
-
 class BookSerializer(serializers.ModelSerializer):
-    user = user_serializer()
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=UserAccount.objects.all(), write_only=True)
+    user_details = UserSerializer(source='user', read_only=True)
 
     class Meta:
         model = Books
-        fields = "__all__"
+        fields = ["id", "title", "author", "description", "publication_date",
+                  "isbn", "price", "cover_image", "user", "user_details"]
