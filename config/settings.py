@@ -53,9 +53,10 @@ THIRD_PARTY_APPS = [
     "django_celery_beat",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "debug_toolbar",
 ]
 
-LOCAL_APPS = ["core_apps.UserAccount"]
+LOCAL_APPS = ["core_apps.UserAccount", "core_apps.Product"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -63,7 +64,12 @@ AUTH_USER_MODEL = "UserAccount.UserAccount"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",  # Restrict access to authenticated users
     ],
 }
 
@@ -89,6 +95,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"

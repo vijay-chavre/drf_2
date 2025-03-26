@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import serializers
-from core_apps.UserAccount.models import UserAccount, Books
+from core_apps.UserAccount.models import UserAccount
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,11 +29,3 @@ class user_serializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = ["id", "email", "first_name", "last_name", "username"]
-
-
-class BookSerializer(serializers.ModelSerializer):
-    user = user_serializer()
-
-    class Meta:
-        model = Books
-        fields = "__all__"
