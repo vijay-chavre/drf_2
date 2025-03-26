@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -52,4 +53,4 @@ class Product(models.Model):
         db_table = "product"
 
     def __str__(self):
-        return self.name if self.email else self.name
+        return self.name

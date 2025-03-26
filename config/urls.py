@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from rest_framework import permissions
+from rest_framework import routers
 
 
 from rest_framework_simplejwt.views import (
@@ -10,6 +11,7 @@ from rest_framework_simplejwt.views import (
 )
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -24,9 +26,11 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
+from .navigation import router
+
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("api/", include("core_apps.UserAccount.urls")),
+    path("api/", include(router.urls)),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path(
