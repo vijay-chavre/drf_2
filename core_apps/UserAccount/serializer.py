@@ -1,4 +1,3 @@
-from django.urls import path, include
 from rest_framework import serializers
 from core_apps.UserAccount.models import UserAccount
 
@@ -6,7 +5,7 @@ from core_apps.UserAccount.models import UserAccount
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = "__all__"
+        fields = ["id", "email", "first_name", "last_name", "username"]
         extra_kwargs = {
             "password": {"write_only": True}
         }  # Prevent password from being included in responses
@@ -21,7 +20,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation["full_name"] = f"{instance.first_name} {instance.last_name}"
+        representation["full_name"] = (
+            f"{
+            instance.first_name} {instance.last_name}"
+        )
         return representation
 
 
