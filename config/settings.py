@@ -12,7 +12,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR / "core_apps"
 
 # Determine which environment file to load
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'local')
+ENVIRONMENT = os.getenv("ENVIRONMENT", "local")
 env_file = os.path.join(BASE_DIR, ".envs", f".env.{ENVIRONMENT}")
 
 if os.path.isfile(env_file):
@@ -59,21 +59,22 @@ THIRD_PARTY_APPS = [
     "debug_toolbar",
 ]
 
-LOCAL_APPS = ["core_apps.UserAccount", "core_apps.Product"]
+LOCAL_APPS = ["core_apps.UserAccount"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 AUTH_USER_MODEL = "UserAccount.UserAccount"
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.TokenAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",  # Restrict access to authenticated users
-    ],
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework.permissions.IsAuthenticated",  # Restrict access to authenticated users
+    # ],
 }
 
 SWAGGER_SETTINGS = {

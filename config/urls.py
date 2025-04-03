@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from rest_framework import permissions
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView
 
 
 from rest_framework_simplejwt.views import (
@@ -26,13 +27,12 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-from .navigation import router
 
 urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
-    path("api/", include(router.urls)),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"
     ),
